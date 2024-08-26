@@ -19,14 +19,29 @@ class datadog_agent::params {
   $logs_enabled                   = false
   $logs_open_files_limit          = undef
   $container_collect_all          = false
-  $use_apt_backup_keyserver       = false
-  $apt_backup_keyserver           = 'hkp://pool.sks-keyservers.net:80'
-  $apt_keyserver                  = 'hkp://keyserver.ubuntu.com:80'
   $sysprobe_service_name          = 'datadog-agent-sysprobe'
+  $securityagent_service_name     = 'datadog-agent-security'
+  $module_metadata                = load_module_metadata($module_name)
 
-  case $::operatingsystem {
-    'Ubuntu','Debian' : {
+  case $facts['os']['name'] {
+    'Ubuntu','Debian','Raspbian' : {
       $rubydev_package            = 'ruby-dev'
+      case $facts['os']['release']['full']{
+        '14.04': {
+          # Specific ruby/rubygems package name for Ubuntu 14.04
+          $ruby_package           = 'ruby'
+          $rubygems_package       = 'ruby1.9.1-full'
+        }
+        '18.04': {
+          # Specific ruby/rubygems package name for Ubuntu 18.04
+          $ruby_package           = 'ruby-full'
+          $rubygems_package       = 'rubygems'
+        }
+        default: {
+          $ruby_package           = 'ruby'
+          $rubygems_package       = 'rubygems'
+        }
+      }
       $legacy_conf_dir            = '/etc/dd-agent/conf.d'
       $conf_dir                   = '/etc/datadog-agent/conf.d'
       $dd_user                    = 'dd-agent'
@@ -39,8 +54,10 @@ class datadog_agent::params {
       $permissions_protected_file = '0600'
       $agent_binary               = '/opt/datadog-agent/bin/agent/agent'
     }
-    'RedHat','CentOS','Fedora','Amazon','Scientific','OracleLinux' : {
+    'RedHat','CentOS','Fedora','Amazon','Scientific','OracleLinux', 'AlmaLinux', 'Rocky', 'OpenSuSE', 'SLES' : {
       $rubydev_package            = 'ruby-devel'
+      $ruby_package               = 'ruby'
+      $rubygems_package           = 'rubygems'
       $legacy_conf_dir            = '/etc/dd-agent/conf.d'
       $conf_dir                   = '/etc/datadog-agent/conf.d'
       $dd_user                    = 'dd-agent'
@@ -66,7 +83,7 @@ class datadog_agent::params {
       $permissions_protected_file = '0660' # as bug in: https://tickets.puppetlabs.com/browse/PA-2877
       $agent_binary               = 'C:/Program Files/Datadog/Datadog Agent/embedded/agent.exe'
     }
-    default: { fail("Class[datadog_agent]: Unsupported operatingsystem: ${::operatingsystem}") }
+    default: { fail("Class[datadog_agent]: Unsupported operatingsystem: ${facts['os']['name']}") }
   }
 
 }

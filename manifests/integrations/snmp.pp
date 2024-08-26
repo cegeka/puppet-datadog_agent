@@ -3,25 +3,22 @@
 # This class will enable snmp check
 #
 # Parameters:
-#   $mibs_folder:
-#        Optional folder for custom mib files (python format)
+#   $init_config:
+#       Optional hash (see snmp.yaml.example for reference)
 #
-#   $ignore_nonincreasing_oid:
-#        Default: false
+#   $instances:
+#        Array of hashes containing snmp instance configuration (see snmp.yaml.example for reference)
 #
-#   $snmp_v1_instances
-#        Array of Hashes containinv snmp version 1 configuration (see snmp.yaml.example for reference)
-#
-#   $snmp_v2_instances
-#        Array of Hashes containinv snmp version 2 configuration (see snmp.yaml.example for reference)
-#
-#   $snmp_v3_instances
-#        Array of Hashes containinv snmp version 3 configuration (see snmp.yaml.example for reference)
+#   $mibs_folder: (Deprecated in favor of $init_config)
+#   $ignore_nonincreasing_oid: (Deprecated in favor of $init_config)
+#   $snmp_v1_instances: (Deprecated in favor of $instances)
+#   $snmp_v2_instances: (Deprecated in favor of $instances)
+#   $snmp_v3_instances: (Deprecated in favor of $instances)
 #
 # Sample Usage:
 #
 #   class { 'datadog_agent::integrations::snmp':
-#     snmp_v2_instances => [
+#     instances => [
 #       {
 #         ip_address       => 'localhost',
 #         port             => 161,
@@ -57,13 +54,15 @@
 class datadog_agent::integrations::snmp (
   $mibs_folder              = undef,
   $ignore_nonincreasing_oid = false,
+  $init_config              = {},
+  $instances                = [],
   $snmp_v1_instances        = [],
   $snmp_v2_instances        = [],
   $snmp_v3_instances        = [],
 ) inherits datadog_agent::params {
-  include ::datadog_agent
+  require ::datadog_agent
 
-  $_instances = {
+  $versioned_instances = {
     1 => $snmp_v1_instances,
     2 => $snmp_v2_instances,
     3 => $snmp_v3_instances,
@@ -78,7 +77,7 @@ class datadog_agent::integrations::snmp (
 
     file { $dst_dir:
       ensure  => directory,
-      owner   => $datadog_agent::params::dd_user,
+      owner   => $datadog_agent::dd_user,
       group   => $datadog_agent::params::dd_group,
       mode    => $datadog_agent::params::permissions_directory,
       require => Package[$datadog_agent::params::package_name],
@@ -91,7 +90,7 @@ class datadog_agent::integrations::snmp (
 
   file { $dst:
     ensure  => file,
-    owner   => $datadog_agent::params::dd_user,
+    owner   => $datadog_agent::dd_user,
     group   => $datadog_agent::params::dd_group,
     mode    => $datadog_agent::params::permissions_protected_file,
     content => template('datadog_agent/agent-conf.d/snmp.yaml.erb'),

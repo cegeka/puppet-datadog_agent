@@ -65,7 +65,7 @@ class datadog_agent::integrations::kafka(
   Optional[Hash[String[1], String[1]]] $tags = undef,
   Optional[Array[Hash[String[1], Data]]] $instances = undef,
 ) inherits datadog_agent::params {
-  include datadog_agent
+  require ::datadog_agent
 
   if !$instances and $host and $port {
     $servers = [{
@@ -95,7 +95,7 @@ class datadog_agent::integrations::kafka(
 
     file { $dst_dir:
       ensure  => directory,
-      owner   => $datadog_agent::params::dd_user,
+      owner   => $datadog_agent::dd_user,
       group   => $datadog_agent::params::dd_group,
       mode    => $datadog_agent::params::permissions_directory,
       require => Package[$datadog_agent::params::package_name],
@@ -108,7 +108,7 @@ class datadog_agent::integrations::kafka(
 
   file { $dst:
     ensure  => file,
-    owner   => $datadog_agent::params::dd_user,
+    owner   => $datadog_agent::dd_user,
     group   => $datadog_agent::params::dd_group,
     mode    => $datadog_agent::params::permissions_protected_file,
     content => template('datadog_agent/agent-conf.d/kafka.yaml.erb'),

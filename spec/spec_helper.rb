@@ -1,7 +1,7 @@
 require 'puppetlabs_spec_helper/module_spec_helper'
 
 DEBIAN_OS = ['Ubuntu', 'Debian'].freeze
-REDHAT_OS = ['RedHat', 'CentOS', 'Fedora', 'Amazon', 'Scientific', 'OracleLinux'].freeze
+REDHAT_OS = ['RedHat', 'CentOS', 'Fedora', 'Amazon', 'Scientific', 'OracleLinux', 'AlmaLinux', 'Rocky'].freeze
 WINDOWS_OS = ['Windows'].freeze
 
 if RSpec::Support::OS.windows?
@@ -26,6 +26,10 @@ else
   PERMISSIONS_PROTECTED_FILE = '0600'.freeze
 end
 
+def min_puppet_version(version)
+  Gem.loaded_specs['puppet'].version > Gem::Version.new(version)
+end
+
 def getosfamily(operatingsystem)
   if DEBIAN_OS.include?(operatingsystem)
     'debian'
@@ -33,6 +37,16 @@ def getosfamily(operatingsystem)
     'redhat'
   else
     'windows'
+  end
+end
+
+def getosmajor(operatingsystem)
+  if DEBIAN_OS.include?(operatingsystem)
+    '14'
+  elsif REDHAT_OS.include?(operatingsystem)
+    '7'
+  else
+    '2019'
   end
 end
 
@@ -57,13 +71,19 @@ RSpec.configure do |c|
     'lsbdistrelease'             => (RSpec::Support::OS.windows? ? '2019 SP1' : '14.04'),
     'lsbdistcodename'            => (RSpec::Support::OS.windows? ? '2019' : '14.04'),
     'os'                         => {
-      'name'    => (RSpec::Support::OS.windows? ? 'Windows' : 'Ubuntu'),
-      'family'  => (RSpec::Support::OS.windows? ? 'windows' : 'Debian'),
-      'release' => {
-        'major' => (RSpec::Support::OS.windows? ? '2019' : '14'),
-        'minor' => (RSpec::Support::OS.windows? ? 'SP1' : '04'),
-        'full'  => (RSpec::Support::OS.windows? ? '2019 SP1' : '14.04'),
+      'architecture' => 'x86_64',
+      'name'         => (RSpec::Support::OS.windows? ? 'Windows' : 'Ubuntu'),
+      'family'       => (RSpec::Support::OS.windows? ? 'windows' : 'Debian'),
+      'release'      => {
+        'major'      => (RSpec::Support::OS.windows? ? '2019' : '14'),
+        'minor'      => (RSpec::Support::OS.windows? ? 'SP1' : '04'),
+        'full'       => (RSpec::Support::OS.windows? ? '2019 SP1' : '14.04'),
       },
     },
   }
+end
+
+# Get parameters from catalogue.
+def get_from_catalogue(type, name, parameter)
+  catalogue.resource(type, name).send(:parameters)[parameter.to_sym]
 end

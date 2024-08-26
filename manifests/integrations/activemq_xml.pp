@@ -52,7 +52,7 @@ class datadog_agent::integrations::activemq_xml(
   Optional[Array[String]] $detailed_subscribers = [],
   Optional[Array] $instances                    = undef,
 ) inherits datadog_agent::params {
-  include datadog_agent
+  require ::datadog_agent
 
   $legacy_dst = "${datadog_agent::params::legacy_conf_dir}/activemq_xml.yaml"
   if $::datadog_agent::_agent_major_version > 5 {
@@ -63,7 +63,7 @@ class datadog_agent::integrations::activemq_xml(
 
     file { $dst_dir:
       ensure  => directory,
-      owner   => $datadog_agent::params::dd_user,
+      owner   => $datadog_agent::dd_user,
       group   => $datadog_agent::params::dd_group,
       mode    => $datadog_agent::params::permissions_directory,
       require => Package[$datadog_agent::params::package_name],
@@ -92,7 +92,7 @@ class datadog_agent::integrations::activemq_xml(
 
   file { $dst:
     ensure  => file,
-    owner   => $datadog_agent::params::dd_user,
+    owner   => $datadog_agent::dd_user,
     group   => $datadog_agent::params::dd_group,
     mode    => $datadog_agent::params::permissions_protected_file,
     content => template('datadog_agent/agent-conf.d/activemq_xml.yaml.erb'),

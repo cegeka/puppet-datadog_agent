@@ -6,6 +6,8 @@
 # Parameters:
 #   $api_key:
 #       Your DataDog API Key. Please replace with your key value
+#   $datadog_site:
+#       URL to use to talk to the Datadog API
 #
 # Actions:
 #
@@ -19,17 +21,21 @@ class datadog_agent::reports(
   $dogapi_version,
   $manage_dogapi_gem = true,
   $hostname_extraction_regex = undef,
-  $datadog_site = 'datadoghq.com',
+  $proxy_http = undef,
+  $proxy_https = undef,
+  $report_fact_tags = [],
+  $report_trusted_fact_tags = [],
+  $datadog_site = 'https://api.datadoghq.com',
   $puppet_gem_provider = $datadog_agent::params::gem_provider,
 ) inherits datadog_agent::params {
 
-  if ($::operatingsystem == 'Windows') {
+  if ($facts['os']['name'] == 'Windows') {
 
     fail('Reporting is not yet supported from a Windows host')
 
   } else {
 
-    include datadog_agent
+    require ::datadog_agent
 
     if $manage_dogapi_gem {
       $rubydev_package = $datadog_agent::params::rubydev_package
@@ -43,9 +49,15 @@ class datadog_agent::reports(
       }
 
       if (! defined(Package['rubygems'])) {
-        # Ensure rubygems is installed
-        class { 'ruby':
-          rubygems_update => false
+        package { 'ruby':
+          ensure => 'installed',
+          name   => $datadog_agent::params::ruby_package
+        }
+
+        package { 'rubygems':
+          ensure  => 'installed',
+          name    => $datadog_agent::params::rubygems_package,
+          require => Package['ruby']
         }
       }
 

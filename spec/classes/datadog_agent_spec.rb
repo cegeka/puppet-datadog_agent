@@ -6,8 +6,15 @@ describe 'datadog_agent' do
       describe 'datadog_agent class without any parameters on Solaris/Nexenta' do
         let(:facts) do
           {
-            osfamily:         'Solaris',
-            operatingsystem:  'Nexenta',
+            os: {
+              'architecture' => 'x86_64',
+              'family' => 'Solaris',
+              'name' => 'Nexenta',
+              'release' => {
+                'major' => '3',
+                'full' => '3.0',
+              },
+            },
           }
         end
 
@@ -27,14 +34,21 @@ describe 'datadog_agent' do
       end
       let(:facts) do
         {
-          osfamily: 'debian',
-          operatingsystem: 'Ubuntu',
+          os: {
+            'architecture' => 'x86_64',
+            'family' => 'debian',
+            'name' => 'Ubuntu',
+            'release' => {
+              'major' => '14',
+              'full' => '14.04',
+            },
+          },
         }
       end
 
       it do
         is_expected.to contain_file('/etc/apt/sources.list.d/datadog.list')\
-          .with_content(%r{deb\s+https://apt.datadoghq.com/\s+stable\s+main})
+          .with_content(%r{deb\s+\[signed-by=/usr/share/keyrings/datadog-archive-keyring.gpg\]\s+https://apt.datadoghq.com/\s+stable\s+main})
       end
     end
 
@@ -46,14 +60,21 @@ describe 'datadog_agent' do
       end
       let(:facts) do
         {
-          osfamily: 'debian',
-          operatingsystem: 'Ubuntu',
+          os: {
+            'architecture' => 'x86_64',
+            'family' => 'debian',
+            'name' => 'Ubuntu',
+            'release' => {
+              'major' => '14',
+              'full' => '14.04',
+            },
+          },
         }
       end
 
       it do
         is_expected.to contain_file('/etc/apt/sources.list.d/datadog.list')\
-          .with_content(%r{deb\s+https://apt.datadoghq.com/\s+stable\s+6})
+          .with_content(%r{deb\s+\[signed-by=/usr/share/keyrings/datadog-archive-keyring.gpg\]\s+https://apt.datadoghq.com/\s+stable\s+6})
       end
     end
 
@@ -65,14 +86,21 @@ describe 'datadog_agent' do
       end
       let(:facts) do
         {
-          osfamily: 'debian',
-          operatingsystem: 'Ubuntu',
+          os: {
+            'architecture' => 'x86_64',
+            'family' => 'debian',
+            'name' => 'Ubuntu',
+            'release' => {
+              'major' => '14',
+              'full' => '14.04',
+            },
+          },
         }
       end
 
       it do
         is_expected.to contain_file('/etc/apt/sources.list.d/datadog.list')\
-          .with_content(%r{deb\s+https://apt.datadoghq.com/\s+stable\s+7})
+          .with_content(%r{deb\s+\[signed-by=/usr/share/keyrings/datadog-archive-keyring.gpg\]\s+https://apt.datadoghq.com/\s+stable\s+7})
       end
     end
 
@@ -84,14 +112,21 @@ describe 'datadog_agent' do
       end
       let(:facts) do
         {
-          osfamily: 'debian',
-          operatingsystem: 'Ubuntu',
+          os: {
+            'architecture' => 'x86_64',
+            'family' => 'debian',
+            'name' => 'Ubuntu',
+            'release' => {
+              'major' => '14',
+              'full' => '14.04',
+            },
+          },
         }
       end
 
       it do
         is_expected.to contain_file('/etc/apt/sources.list.d/datadog.list')\
-          .with_content(%r{deb\s+https://apt.datadoghq.com/\s+stable\s+6})
+          .with_content(%r{deb\s+\[signed-by=/usr/share/keyrings/datadog-archive-keyring.gpg\]\s+https://apt.datadoghq.com/\s+stable\s+6})
       end
     end
 
@@ -103,14 +138,21 @@ describe 'datadog_agent' do
       end
       let(:facts) do
         {
-          osfamily: 'debian',
-          operatingsystem: 'Ubuntu',
+          os: {
+            'architecture' => 'x86_64',
+            'family' => 'debian',
+            'name' => 'Ubuntu',
+            'release' => {
+              'major' => '14',
+              'full' => '14.04',
+            },
+          },
         }
       end
 
       it do
         is_expected.to contain_file('/etc/apt/sources.list.d/datadog.list')\
-          .with_content(%r{deb\s+https://apt.datadoghq.com/\s+stable\s+6})
+          .with_content(%r{deb\s+\[signed-by=/usr/share/keyrings/datadog-archive-keyring.gpg\]\s+https://apt.datadoghq.com/\s+stable\s+6})
       end
     end
 
@@ -122,14 +164,129 @@ describe 'datadog_agent' do
       end
       let(:facts) do
         {
-          osfamily: 'debian',
-          operatingsystem: 'Ubuntu',
+          os: {
+            'architecture' => 'x86_64',
+            'family' => 'debian',
+            'name' => 'Ubuntu',
+            'release' => {
+              'major' => '14',
+              'full' => '14.04',
+            },
+          },
         }
       end
 
       it do
         is_expected.to contain_file('/etc/apt/sources.list.d/datadog.list')\
-          .with_content(%r{deb\s+https://apt.datadoghq.com/\s+stable\s+6})
+          .with_content(%r{deb\s+\[signed-by=/usr/share/keyrings/datadog-archive-keyring.gpg\]\s+https://apt.datadoghq.com/\s+stable\s+6})
+      end
+    end
+
+    context 'default agent_flavor' do
+      let(:params) do
+        {
+          agent_version: '1:6.15.1-1',
+        }
+      end
+      let(:facts) do
+        {
+          os: {
+            'architecture' => 'x86_64',
+            'family' => 'debian',
+            'name' => 'Ubuntu',
+            'release' => {
+              'major' => '14',
+              'full' => '14.04',
+            },
+          },
+        }
+      end
+
+      it do
+        is_expected.to contain_package('datadog-agent').with(
+          ensure: '1:6.15.1-1',
+        )
+      end
+    end
+
+    context 'specify agent_flavor' do
+      let(:params) do
+        {
+          agent_version: '1:6.15.1-1',
+          agent_flavor: 'datadog-iot-agent',
+        }
+      end
+      let(:facts) do
+        {
+          os: {
+            'architecture' => 'x86_64',
+            'family' => 'debian',
+            'name' => 'Ubuntu',
+            'release' => {
+              'major' => '14',
+              'full' => '14.04',
+            },
+          },
+        }
+      end
+
+      it do
+        is_expected.to contain_package('datadog-iot-agent').with(
+          ensure: '1:6.15.1-1',
+        )
+      end
+    end
+  end
+
+  if Gem::Version.new(Puppet.version) >= Gem::Version.new('4.10') # We don't support Windows on Puppet older than 4.10
+    context 'windows NPM' do
+      let(:facts) do
+        {
+          os: {
+            'architecture' => 'x86_64',
+            'family' => 'windows',
+            'name' => 'Windows',
+            'release' => {
+              'major' => '2019',
+              'full' => '2019 SP1',
+            },
+          },
+        }
+      end
+
+      describe 'with NPM enabled' do
+        let(:params) do
+          {
+            agent_major_version: 7,
+            windows_npm_install: true,
+            api_key: 'notakey',
+            host: 'notahost',
+          }
+        end
+
+        it do
+          is_expected.to contain_package('Datadog Agent').with(
+            ensure: 'installed',
+            install_options: ['/norestart', { 'APIKEY' => 'notakey', 'HOSTNAME' => 'notahost', 'TAGS' => '""', 'ADDLOCAL' => 'MainApplication,NPM' }],
+          )
+        end
+      end
+
+      describe 'with NPM disabled' do
+        let(:params) do
+          {
+            agent_major_version: 7,
+            api_key: 'notakey',
+            host: 'notahost',
+          }
+        end
+
+        it do
+          is_expected.to contain_package('Datadog Agent').with(
+            ensure: 'installed',
+            install_options: ['/norestart', { 'APIKEY' => 'notakey', 'HOSTNAME' => 'notahost', 'TAGS' => '""' }],
+          )
+        end
       end
     end
   end
@@ -139,8 +296,15 @@ describe 'datadog_agent' do
     ALL_OS.each do |operatingsystem|
       let(:facts) do
         {
-          operatingsystem: operatingsystem,
-          osfamily: getosfamily(operatingsystem),
+          os: {
+            'architecture' => 'x86_64',
+            'family' => getosfamily(operatingsystem),
+            'name' => operatingsystem,
+            'release' => {
+              'major' => getosmajor(operatingsystem),
+              'full' => getosrelease(operatingsystem),
+            },
+          },
         }
       end
 
@@ -181,8 +345,15 @@ describe 'datadog_agent' do
         end
         let(:facts) do
           {
-            operatingsystem: operatingsystem,
-            osfamily: getosfamily(operatingsystem),
+            os: {
+              'architecture' => 'x86_64',
+              'family' => getosfamily(operatingsystem),
+              'name' => operatingsystem,
+              'release' => {
+                'major' => getosmajor(operatingsystem),
+                'full' => getosrelease(operatingsystem),
+              },
+            },
           }
         end
 
@@ -1519,25 +1690,7 @@ describe 'datadog_agent' do
             end
           end
 
-          if DEBIAN_OS.include?(operatingsystem)
-            it do
-              is_expected.to contain_class('datadog_agent::ubuntu')\
-                .with_apt_keyserver('hkp://keyserver.ubuntu.com:80')
-            end
-            context 'use backup keyserver' do
-              let(:params) do
-                {
-                  use_apt_backup_keyserver: true,
-                  agent_major_version: 5,
-                }
-              end
-
-              it do
-                is_expected.to contain_class('datadog_agent::ubuntu')\
-                  .with_apt_keyserver('hkp://pool.sks-keyservers.net:80')
-              end
-            end
-          elsif REDHAT_OS.include?(operatingsystem)
+          if REDHAT_OS.include?(operatingsystem)
             it { is_expected.to contain_class('datadog_agent::redhat') }
           end
         end
@@ -1551,8 +1704,15 @@ describe 'datadog_agent' do
         end
         let(:facts) do
           {
-            operatingsystem: operatingsystem,
-            osfamily: getosfamily(operatingsystem),
+            os: {
+              'architecture' => 'x86_64',
+              'family' => getosfamily(operatingsystem),
+              'name' => operatingsystem,
+              'release' => {
+                'major' => getosmajor(operatingsystem),
+                'full' => getosrelease(operatingsystem),
+              },
+            },
           }
         end
 
@@ -1577,8 +1737,15 @@ describe 'datadog_agent' do
         end
         let(:facts) do
           {
-            operatingsystem: operatingsystem,
-            osfamily: getosfamily(operatingsystem),
+            os: {
+              'architecture' => 'x86_64',
+              'family' => getosfamily(operatingsystem),
+              'name' => operatingsystem,
+              'release' => {
+                'major' => getosmajor(operatingsystem),
+                'full' => getosrelease(operatingsystem),
+              },
+            },
           }
         end
 
@@ -1591,17 +1758,34 @@ describe 'datadog_agent' do
         end
 
         config_dir = WINDOWS_OS.include?(operatingsystem) ? 'C:/ProgramData/Datadog' : '/etc/datadog-agent'
-        config_yaml_file = config_dir + '/datadog.yaml'
+        config_yaml_file = File.join(config_dir, 'datadog.yaml')
+        install_info_file = File.join(config_dir, 'install_info')
         log_file = WINDOWS_OS.include?(operatingsystem) ? 'C:/ProgramData/Datadog/logs/agent.log' : '\/var\/log\/datadog\/agent.log'
 
         it { is_expected.to contain_file(config_dir) }
         it { is_expected.to contain_file(config_yaml_file) }
+        it { is_expected.to contain_file(install_info_file) }
         it { is_expected.to contain_file(config_dir + '/conf.d').with_ensure('directory') }
 
         # Agent 5 files
         it { is_expected.not_to contain_file('/etc/dd-agent') }
         it { is_expected.not_to contain_concat('/etc/dd-agent/datadog.conf') }
         it { is_expected.not_to contain_file('/etc/dd-agent/conf.d').with_ensure('directory') }
+
+        describe 'install_info check' do
+          let!(:install_info) do
+            contents = catalogue.resource('file', install_info_file).send(:parameters)[:content]
+            YAML.safe_load(contents)
+          end
+
+          it 'adds an install_info' do
+            expect(install_info['install_method']).to match(
+              'tool' => 'puppet',
+              'tool_version' => %r{^puppet-unknown$}, # puppetversion is not set in tests, this field has to be tested manually
+              'installer_version' => %r{^datadog_module-\d+\.\d+\.\d+$},
+            )
+          end
+        end
 
         describe 'agent6 parameter check' do
           context 'with defaults' do
@@ -2154,24 +2338,87 @@ describe 'datadog_agent' do
     end
   end
 
+  context 'with trusted_facts to tags set' do
+    Puppet::Util::Log.level = :debug
+    Puppet::Util::Log.newdestination(:console)
+
+    describe 'a6 ensure facts_array outputs a list of tags' do
+      let(:params) do
+        {
+          agent_major_version: 6,
+          puppet_run_reports: true,
+          facts_to_tags: ['os.family'],
+          trusted_facts_to_tags: ['extensions.trusted_fact', 'extensions.facts_array', 'extensions.facts_hash.actor.first_name'],
+        }
+      end
+      let(:facts) do
+        {
+          'os' => {
+            'architecture' => 'x86_64',
+            'family' => 'redhat',
+            'name' => 'CentOS',
+            'release' => {
+              'major' => '6',
+              'full' => '6.3',
+            },
+          },
+        }
+      end
+      let(:trusted_facts) do
+        {
+          'trusted_fact' => 'test',
+          'facts_array' => ['one', 'two'],
+          'facts_hash' => {
+            'actor' => {
+              'first_name' => 'Macaulay',
+              'last_name' => 'Culkin',
+            },
+          },
+        }
+      end
+
+      it do
+        is_expected.to contain_file('/etc/datadog-agent/datadog.yaml')
+          .with_content(%r{tags:\n- os.family:redhat\n- extensions.trusted_fact:test\n- extensions.facts_array:one\n- extensions.facts_array:two\n- extensions.facts_hash.actor.first_name:Macaulay})
+      end
+    end
+  end
+
   context 'with facts to tags set' do
     describe 'a6 ensure facts_array outputs a list of tags' do
       let(:params) do
         {
           agent_major_version: 6,
           puppet_run_reports: true,
-          facts_to_tags: ['osfamily', 'facts_array'],
+          facts_to_tags: ['os.family', 'facts_array', 'facts_hash.actor.first_name', 'looks.like.a.path'],
         }
       end
       let(:facts) do
         {
-          operatingsystem: 'CentOS',
-          osfamily: 'redhat',
-          facts_array: ['one', 'two'],
+          'facts_array' => ['one', 'two'],
+          'facts_hash' => {
+            'actor' => {
+              'first_name' => 'Macaulay',
+              'last_name' => 'Culkin',
+            },
+          },
+          'looks.like.a.path' => 'but_its_not',
+          'os' => {
+            'architecture' => 'x86_64',
+            'family' => 'redhat',
+            'name' => 'CentOS',
+            'release' => {
+              'major' => '6',
+              'full' => '6.3',
+            },
+          },
         }
       end
 
-      it { is_expected.to contain_file('/etc/datadog-agent/datadog.yaml').with_content(%r{tags:\n- osfamily:redhat\n- facts_array:one\n- facts_array:two}) }
+      it do
+        is_expected.to contain_file('/etc/datadog-agent/datadog.yaml')
+          .with_content(%r{tags:\n- os.family:redhat\n- facts_array:one\n- facts_array:two\n- facts_hash.actor.first_name:Macaulay\n- looks.like.a.path:but_its_not})
+      end
     end
 
     describe 'a5 ensure facts_array outputs a list of tags' do
@@ -2184,9 +2431,17 @@ describe 'datadog_agent' do
       end
       let(:facts) do
         {
-          operatingsystem: 'CentOS',
-          osfamily: 'redhat',
           facts_array: ['one', 'two'],
+          osfamily: 'redhat',
+          os: {
+            'architecture' => 'x86_64',
+            'family' => 'redhat',
+            'name' => 'CentOS',
+            'release' => {
+              'major' => '6',
+              'full' => '6.3',
+            },
+          },
         }
       end
 

@@ -13,28 +13,45 @@ git clone git@github.com:DataDog/puppet-datadog-agent.git
 cd puppet-datadog-agent
 ```
 
-### Install dependencies
+### Install dependencies and automatic tests
 
+First, to install the Ruby dependencies run:
+
+```bash
+gem install bundler:1.17.3
+bundle install --path .bundle
 ```
-bundle install
+
+Afterwards, on the first run of the tests, further dependencies will be installed.
+The tests can be run with:
+```bash
+bundle exec rake test
+```
+
+The `test` task has a few different steps, which you can run separately:
+```bash
 rake lint              # Check Puppet manifests with puppet-lint / Run puppet-lint
 rake spec              # Run spec tests in a clean fixtures directory
 rake syntax            # Syntax check Puppet manifests and templates
 rake syntax:manifests  # Syntax check Puppet manifests
 rake syntax:templates  # Syntax check Puppet templates
+```
+
+Lastly, you should install the pre-commit hook:
+```bash
 pip install pre-commit
 pre-commit install
 ```
 
 ### Manual testing
 
-To test the roles provided by this project, you can follow the instructions in the manual tests [readme.md](./environments/readme.md).
+To test the roles provided by this project, you can follow the instructions in the manual tests [readme.md](./environments/README.md).
 
 ### Integration testing
 
 This project uses [Kitchen](https://github.com/test-kitchen/test-kitchen) as its integration tests engine. To really verify integration tests, you should have [Vagrant](https://www.vagrantup.com/) installed on your machine as it is used as a driver-engine.
 
-Kitchen allows you to test specific recipes described in [kitchen.yml](./kitchen.yml). For now, there is only a basic one on Ubuntu, but that should be enough to develop others or to add features in TDD.
+Kitchen allows you to test specific recipes described in [kitchen.yml](./.kitchen.yml). For now, there is only a basic one on Ubuntu, but that should be enough to develop others or to add features in TDD.
 
 To list available targets, you can use the `list` command:
 
@@ -51,7 +68,7 @@ bundle exec kitchen test <target>
 So for example, if you want to test the Agent installation, you can run:
 
 ```bash
-bundle exec kitchen test dd-agent-ubuntu1604
+bundle exec kitchen test dd-agent-ubuntu-1604
 ```
 
 More information about kitchen on its [Getting Started](https://github.com/test-kitchen/test-kitchen/wiki/Getting-Started).

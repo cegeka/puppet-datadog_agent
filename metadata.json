@@ -1,6 +1,6 @@
 {
   "name": "datadog-datadog_agent",
-  "version": "3.1.0",
+  "version": "3.22.0",
   "author": "James Turnbull <james@lovedthanlost.net>, Rob Terhaar <rob@atlanticdynamic>, Jaime Fullaondo <jaime.fullaondo@datadoghq.com>, Albert Vaca <albert.vaca@datadoghq.com>",
   "summary": "Install the Datadog monitoring agent and report Puppet runs to Datadog",
   "license": "Apache-2.0",
@@ -10,19 +10,15 @@
   "dependencies": [
     {
       "name": "puppetlabs/stdlib",
-      "version_requirement": ">=4.24.0 <7.0.0"
-    },
-    {
-      "name": "puppetlabs/ruby",
-      "version_requirement": ">=1.0.0 <2.0.0"
+      "version_requirement": ">=4.25.0 <9.0.0"
     },
     {
       "name": "puppetlabs/concat",
-      "version_requirement": ">=4.0.0 <7.0.0"
+      "version_requirement": ">=4.0.0 <8.0.0"
     },
     {
       "name": "puppetlabs/apt",
-      "version_requirement": ">=4.4.0 <8.0.0"
+      "version_requirement": ">=4.4.0 <9.0.0"
     },
     {
       "name": "puppetlabs/puppetserver_gem",
@@ -34,7 +30,11 @@
     },
     {
       "name": "puppetlabs/powershell",
-      "version_requirement": ">=2.3.0 <3.0.0"
+      "version_requirement": ">=2.3.0 <5.0.0"
+    },
+    {
+      "name": "puppet/zypprepo",
+      "version_requirement": ">=3.1.0 <4.0.0"
     }
   ],
   "operatingsystem_support": [
@@ -57,6 +57,18 @@
       "operatingsystemrelease": [
         "6",
         "7"
+      ]
+    },
+    {
+      "operatingsystem": "AlmaLinux",
+      "operatingsystemrelease": [
+        "8"
+      ]
+    },
+    {
+      "operatingsystem": "Rocky",
+      "operatingsystemrelease": [
+        "8"
       ]
     },
     {
@@ -114,12 +126,29 @@
         "8",
         "10"
       ]
+    },
+    {
+      "operatingsystem": "SLES",
+      "operatingsystemrelease": [
+        "11",
+        "12",
+        "15"
+      ]
+    },
+    {
+      "operatingsystem": "OpenSUSE",
+      "operatingsystemrelease": [
+        "11",
+        "12",
+        "13",
+        "15"
+      ]
     }
   ],
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">=4.6.0 <7.0.0"
+      "version_requirement": ">=4.6.0 <8.0.0"
     }
   ],
   "description": "This will install the Datadog monitoring agent. Sign up and get your API key at: http://www.datadoghq.com",

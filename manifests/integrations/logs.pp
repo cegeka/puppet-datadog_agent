@@ -40,11 +40,11 @@ class datadog_agent::integrations::logs(
   Array $logs = [],
 ) inherits datadog_agent::params {
   unless $::datadog_agent::_agent_major_version == 5 {
-    include datadog_agent
+    require ::datadog_agent
 
     file { "${datadog_agent::params::conf_dir}/logs.yaml":
       ensure  => file,
-      owner   => $datadog_agent::params::dd_user,
+      owner   => $datadog_agent::dd_user,
       group   => $datadog_agent::params::dd_group,
       mode    => $datadog_agent::params::permissions_protected_file,
       content => template('datadog_agent/agent-conf.d/logs.yaml.erb'),

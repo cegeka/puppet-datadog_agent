@@ -22,7 +22,7 @@ class datadog_agent::integrations::kubernetes_state(
   $tags = [],
 
 ) inherits datadog_agent::params {
-  include datadog_agent
+  require ::datadog_agent
 
   $legacy_dst = "${datadog_agent::params::legacy_conf_dir}/kubernetes_state.yaml"
   if $::datadog_agent::_agent_major_version > 5 {
@@ -33,7 +33,7 @@ class datadog_agent::integrations::kubernetes_state(
 
     file { $dst_dir:
       ensure  => directory,
-      owner   => $datadog_agent::params::dd_user,
+      owner   => $datadog_agent::dd_user,
       group   => $datadog_agent::params::dd_group,
       mode    => $datadog_agent::params::permissions_directory,
       require => Package[$datadog_agent::params::package_name],
@@ -46,7 +46,7 @@ class datadog_agent::integrations::kubernetes_state(
 
   file { $dst:
     ensure  => file,
-    owner   => $datadog_agent::params::dd_user,
+    owner   => $datadog_agent::dd_user,
     group   => $datadog_agent::params::dd_group,
     mode    => $datadog_agent::params::permissions_file,
     require => Package[$datadog_agent::params::package_name],
